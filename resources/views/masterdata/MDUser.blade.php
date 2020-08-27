@@ -1,233 +1,237 @@
 @extends('layouts.app')
-@section('dashboard')
-Master Data User
+{{-- @section('dashboard')
+Catat Jumlah Pesanan Pecahan
 <small>{!! auth()->user()->name !!}</small>
+@endsection --}}
+@section('title')
+<a class="h1 mb-0 text-white text-uppercase d-none d-lg-inline-block" href="./index.html">Lihat Pesanan</a>
+@endsection
+{{-- <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-2.0.0/sl-1.3.0/datatables.min.css" /> --}}
+
+
+@section('header')
+
 @endsection
 
-@section('breadcrumb')
-<li><a href="{{ url('home') }}"><i class="fa fa-dashboard"></i> Home</a></li>
-<li class="active">Master Data User</li>
-@endsection
+@include('layouts.src_datatable')
 
 @section('content')
-<section class="content-header">
-    {{-- <h1>
-        List Master Data User
-        <!-- <small>Monitor Pengujian Pita Cukai</small> -->
-    </h1> --}}
+<div class="card shadow">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+            <div class="col">
+                <button type="button" name="tambahuser" id="tambahuser" class="btn btn-success "><i
+                        class="fa  fa-refresh"></i>
+                    Tambah User</button>
 
-</section>
-
-<!-- Main content -->
-<section class="content">
-
-
-    <!-- Default box -->
-    <div class="box box-primary box-solid">
-        <div class="box-header with-border">
-            <button type="button" name="tambahuser" id="tambahuser" class="btn btn-success"><i class="fa  fa-plus-circle"></i> Tambah User</button>
-            {{-- <button type="button" name="uploadFile" id="uploadFile" class="btn btn-info ">Import File User</button> --}}
-
-        </div>
-        <div class="box-body">
-            <table id="tbluser" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Avatar</th>
-                        <th>Nama</th>
-                        <th>Email</th>
-                        <th>Instansi</th>
-                        <th>Role</th>
-                        <th width="30%">Action</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-
-
-    <!-- modal -->
-    <div id="formModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Tambah User</h4>
-                </div>
-                <div class="modal-body">
-                    <span id="form_result"></span>
-
-                    <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Nama User : </label>
-                            <div class="col-md-8">
-                                <input type="text" name="name" id="name" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Email : </label>
-                            <div class="col-md-8">
-                                <input type="text" name="email" id="email" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Password : </label>
-
-                            <div class="col-md-8">
-                                    <div class="input-group" id="show_hide_password">
-                                            <input class="form-control" type="password" name="password" id="password">
-                                            <div class="input-group-btn">
-                                              <button  class="btn btn-default" type="button"><i class="fa fa-eye-slash" aria-hidden="true"></i></button>
-                                            </div>
-                                          </div>
-                                    {{-- <div class="input-group">
-                                            <input type="password"  name="password" id="password" class="form-control pwd">
-                                            <span class="input-group-btn">
-                                              <button class="btn btn-default reveal" type="button"><i class="glyphicon glyphicon-eye-open"></i></button>
-                                            </span>          
-                                          </div> --}}
-                                {{-- <input type="text" name="password" id="password" class="form-control" /> --}}
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Instansi : </label>
-                            <div class="col-md-8">
-                                    <select name="instansi" id="instansi" class="form-control select2" style="width: 100%;">
-                                            <option selected="selected">Pilih Salah Satu</option>
-                                            <option value="Peruri">Peruri</option>
-                                            <option value="PT. Pura Nusapersada">PT. Pura Nusapersada</option>
-                                            <option value="PT. Kertas Padalarang">PT. Kertas Padalarang</option>
-                                            <option value="Admin">Admin</option>
-                                            <option value="Beacukai">Beacukai</option>
-                                    </select>
-                             
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">Role : </label>
-                            <div class="col-md-8">
-                            <select name="roles" id="roles" class="form-control select2" style="width: 100%;">
-                                    <option selected>-Pilih Role-</option>
-                                    @foreach($roles as $data)
-                                    <option value="{{$data->display_name}}">{{$data->display_name}}</option>
-                                    @endforeach
-                            </select>
-                            </div>
-                        </div>
-                        <div class="form-group"> 
-                            <label class="control-label col-md-4">Upload Foto : </label> 
-                                <div class="col-md-8">
-                                <input type="file" name="avatar" id="avatar" class="form-control" />
-                            </div>
-                                {{-- <p class="help-block">file surat perintah</p> --}}
-                             
-                        </div>
-
-                        <br />
-                        <div class="form-group" align="center">
-                            <input type="hidden" name="action" id="action" />
-                            <input type="hidden" name="hidden_id" id="hidden_id" />
-                            <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
-                                value="Add" />
-                        </div>
-                    </form>
-                </div>
+            </div>
+            <div class="col text-right">
+                <button type="button" name="refresh" id="refresh" class="btn btn-success "><i
+                        class="fa  fa-refresh"></i>
+                    Refresh</button>
             </div>
         </div>
     </div>
+    <div class="table-responsive">
+        <!-- Projects table -->
+        {{-- table align-items-center table-flush --}}
+        <table id="tbluser" class="table table-bordered table-striped" style="widht:100%;">
+            <thead>
+                <tr>
+                    <th>Avatar</th>
+                    <th>Nama</th>
+                    <th>NP</th>
+                    <th>Email</th>
+                    <th>Instansi</th>
+                    <th>Role</th>
+                    <th width="30%">Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
 
-    <div id="confirmModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Confirmation</h2>
-                </div>
-                <div class="modal-body">
-                    <h4 align="center" style="margin:0;">Are you sure you want to remove this data?</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hapus Baris</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda Yakin Menghapus Baris Ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id='deletebaris'>Delete</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div id="importData" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Import Data Excell</h2>
-                </div>
-                <div class="modal-body">
-                    <form action="{{route('import.kantor')}}" method="post" enctype="multipart/form-data">
-                        @csrf
-
-                        @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                        @endif
-
-                        @if (session('error'))
-                        <div class="alert alert-success">
-                            {{ session('error') }}
-                        </div>
-                        @endif
-
-                        <div class="form-group">
-                            <label for="">File (.xls, .xlsx)</label>
-                            <input type="file" class="form-control" name="file">
-                            <p class="text-danger">{{ $errors->first('file') }}</p>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-sm">Upload</button>
-                        </div>
-                </div> 
-                {{-- <div class="modal-footer">
-                        <button type="button" name="ok_button" id="ok_button" class="btn btn-success">Simpan</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div> --}}
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <form method="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label class="control-label">Nama User : </label>
+                        <div>
+                            <input type="text" name="name" id="name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Email : </label>
+                        <div>
+                            <input type="text" name="email" id="email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">NP : </label>
+                        <div>
+                            <input type="text" name="np" id="np" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Password : </label>
+
+                        <div>
+                            <div class="input-group" id="show_hide_password">
+                                <input class="form-control" type="password" name="password" id="password">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="button"><i class="fa fa-eye-slash"
+                                            aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Role : </label>
+                        <div>
+
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline1" name="customRadioInline1"
+                                    class="custom-control-input" value="{{$roles[0]->display_name}}">
+                                <label class="custom-control-label" for="customRadioInline1"
+                                    value="{{$roles[0]->display_name}}">{{$roles[0]->display_name}}</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline2" name="customRadioInline1"
+                                    class="custom-control-input" value="{{$roles[1]->display_name}}">
+                                <label class="custom-control-label" for="customRadioInline2"
+                                    value="{{$roles[1]->display_name}}">{{$roles[1]->display_name}}</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="customRadioInline3" name="customRadioInline1"
+                                    class="custom-control-input" value="{{$roles[2]->display_name}}">
+                                <label class="custom-control-label"
+                                    for="customRadioInline3">{{$roles[2]->display_name}}</label>
+                            </div>
+
+                            {{-- <select name="roles" id="roles" class="select2 form-control"  >
+                                <option selected>-Pilih Role-</option>
+                               
+                                @foreach($roles as $data) 
+                                <option value="{{$data->display_name}}">{{$data->display_name}}</option>
+                            @endforeach
+                            </select> --}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label ">Upload Foto : </label>
+                        <div>
+                            <input type="file" name="avatar" id="avatar" class="form-control" />
+                        </div>
+                        {{-- <p class="help-block">file surat perintah</p> --}}
+
+                    </div>
+
+                    <br />
+                    <div class="form-group" align="center">
+                        <input type="hidden" name="action" id="action" />
+                        <input type="hidden" name="hidden_id" id="hidden_id" />
+                        {{-- <button id="submit" type="submit" class="btn btn-success">Simpan</button> --}}
+                        <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
+                            value="Add" />
+                    </div>
+                </form>
+
+            </div>
+
         </div>
+        {{-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id='deletebaris'>Delete</button>
+            </div> --}}
     </div>
+</div>
 
-
-
-</section>
 
 @endsection
 
+
+
 @section('scripts')
+@include('layouts.srcjs_datatable')
 <script>
     $(document).ready(function () {
-        $("#show_hide_password button").on('click', function(event) {
-        event.preventDefault();
-        if($('#show_hide_password input').attr("type") == "text"){
-            $('#show_hide_password input').attr('type', 'password');
-            $('#show_hide_password i').addClass( "fa-eye-slash" );
-            $('#show_hide_password i').removeClass( "fa-eye" );
-        }else if($('#show_hide_password input').attr("type") == "password"){
-            $('#show_hide_password input').attr('type', 'text');
-            $('#show_hide_password i').removeClass( "fa-eye-slash" );
-            $('#show_hide_password i').addClass( "fa-eye" );
-        }
-    });
- 
-// });
+        $('.select2').select2()
+        $("#show_hide_password button").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password i').addClass("fa-eye-slash");
+                $('#show_hide_password i').removeClass("fa-eye");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password i').removeClass("fa-eye-slash");
+                $('#show_hide_password i').addClass("fa-eye");
+            }
+        });
+
+
+
+        var valRadio = null;
+        $("input[name='customRadioInline1']").change(function () {
+            valRadio = $(this).val()
+            console.log(valRadio)
+
+        });
+
+        // });
         // var SITEURL = '{{URL::to('')}}';
-       var tableUser= $('#tbluser').DataTable({
+        var tableUser = $('#tbluser').DataTable({
             processing: true,
             serverSide: true,
-            scrollCollapse: true,
-            scrollX: true,
+            // scrollCollapse: true,
+            // scrollX: true,
             ajax: {
-                url: "{{ route('user.index') }}",
+
+                url: "{{ route('mduser.daftar') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                data: function (d) {
+
+                    // d.val_idjadwal = idjadwal;
+                }
             },
-           
+
             columns: [{
                     data: 'avatar',
                     name: 'avatar',
@@ -239,7 +243,8 @@ Master Data User
                             return '<span class="label bg-maroon"> Tidak Ada foto</span>'
                             // 12333.pdf
                         } else {
-                            return '<img class="profile-user-img img-responsive img-circle" src ="{{ asset("/img")}}' + '/' + row.avatar +
+                            return '<img class="profile-user-img img-responsive img-circle" src ="{{ asset("/img")}}' +
+                                '/' + row.avatar +
                                 '" style="width:128px; height:129;">'
                             // {{ asset('/img/avatar.pdf') }}data-target="#pdfModal" /file/123123/123123.pdf
                         }
@@ -249,7 +254,13 @@ Master Data User
                 {
                     data: 'name',
                     name: 'name'
-                    
+
+                },
+
+                {
+                    data: 'np',
+                    name: 'np'
+
                 },
                 {
                     data: 'email',
@@ -280,7 +291,7 @@ Master Data User
             $('#formModal').modal('show');
         });
 
-        $('#formModal').on('hidden.bs.modal', function () { 
+        $('#formModal').on('hidden.bs.modal', function () {
             $('#sample_form')[0].reset();
         })
 
@@ -292,20 +303,26 @@ Master Data User
             $('#userCrudModal').html("Edit User");
             $('#action').val("Edit");
             $('#action_button').val("Edit");
-                $('#formModal').modal('show');
-                $('#name').val(data.name);
-                $('#email').val(data.email); 
-                $('#instansi').val(data.instansi).change() 
-                // $('.roles').find('option[value='+data.roles+']').prop('selected',true).trigger('change');
-                // $('#instansi').attr('value',  data.instansi);
-              
-                $('#roles').val(data.roles).trigger('change')
-                // .attr('disabled', true);
-                // $("#roles").selectmenu("refresh");   
-                // $('#role').val(data.roles);
+            $('#formModal').modal('show');
+            $('#name').val(data.name);
+            $('#email').val(data.email);
+            $('#np').val(data.np);
+            $('#instansi').val(data.instansi).change()
+            if(data.roles=='Admin'){
+                $("#customRadioInline1").prop('checked', true);
+                $("input[name='gender']:checked"). val();
+            }else if(data.roles=='Candal'){
+                $("#customRadioInline2").prop('checked', true);
 
-                $('#hidden_id').val(data.id);
+            }else{
+                $("#customRadioInline3").prop('checked', true);
+
+            }
             
+            $('#roles').val(data.roles).trigger('change')
+            
+            $('#hidden_id').val(data.id);
+
         });
 
         $('#uploadFile').click(function () {
@@ -317,12 +334,15 @@ Master Data User
 
         $('#sample_form').on('submit', function (event) {
             event.preventDefault();
-            console.log(new FormData(this))
+            // console.log(valRadio)
+            var formdata = new FormData(this)
+            formdata.append('roles', valRadio)
+
             if ($('#action').val() == 'Add') {
                 $.ajax({
-                    url: "{{ route('user.store') }}",
+                    url: "{{ route('mduser.save') }}",
                     method: "POST",
-                    data: new FormData(this),
+                    data: formdata,
                     contentType: false,
                     cache: false,
                     processData: false,
@@ -358,7 +378,7 @@ Master Data User
 
             if ($('#action').val() == "Edit") {
                 $.ajax({
-                    url: "{{ route('user.update') }}",
+                    url: "{{ route('mduser.updatedata') }}",
                     method: "POST",
                     data: new FormData(this),
                     contentType: false,
@@ -408,9 +428,9 @@ Master Data User
             $('#confirmModal').modal('show');
         });
 
-        $('#ok_button').click(function () {
+        $('#deletebaris').click(function () {
             $.ajax({
-                url: "user/destroy/" + user_id,
+                url: "/mduser/destroy/" + user_id,
                 beforeSend: function () {
                     $('#ok_button').text('Deleting...');
                 },
@@ -435,5 +455,6 @@ Master Data User
     // script src="{{ asset('/js/taskforce.js')}}">
     //script>
     //endpush 
+
 </script>
 @endsection

@@ -27,8 +27,7 @@ Catat Jumlah Pesanan Pecahan
                     </div>
                     <div class="col text-right">
                         <button type="button" name="refresh" id="refresh" class="btn btn-success "><i
-                                class="fa  fa-refresh"></i>
-                            Refresh</button>
+                                class="fa  fa-refresh"></i>Refresh</button>
                     </div>
                 </div>
             </div>
@@ -87,25 +86,26 @@ Catat Jumlah Pesanan Pecahan
     </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Hapus Baris</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hapus Baris</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda Yakin Menghapus Baris Ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id='deletebaris'>Delete</button>
+            </div>
         </div>
-        <div class="modal-body">
-          Apakah Anda Yakin Menghapus Baris Ini?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger" id='deletebaris'>Delete</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
 @endsection
 
@@ -128,51 +128,53 @@ src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.
 
         $('#pesanan').on('click', '.delete', function () {
             $('#exampleModal').modal()
-            delSelectedRow($(this))  
+            delSelectedRow($(this))
         });
-        function delSelectedRow(thisTable){
+
+        function delSelectedRow(thisTable) {
             $('#deletebaris').on('click', function () {
-                var idx = thisTable.closest('tr').index() 
-                
+                var idx = thisTable.closest('tr').index()
+
                 saveDelSelectedRow(table.row(idx).data())
                 $('#pesanan').DataTable().ajax.reload();
                 $('#exampleModal').modal('toggle')
-        })
-            
+            })
+
         }
-        function saveDelSelectedRow(idxRowData){
+
+        function saveDelSelectedRow(idxRowData) {
             $.ajax({
-                            url: "{{ route('pesanan.deletepesanan') }}",
-                            method: "POST",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                    'content')
-                            },
-                            data: idxRowData,
-                            // contentType: "json",
-                            // cache: false,
-                            // processData: false,
-                            // dataType: "json",
-                            beforeSend: function () {
-                                // $('#saveentri').text('proses menyimpan...');
-                            },
-                            success: function (data) {
-                                console.log(data)
-                                if (data.errors) {
-                                    toastr.error(data.errors, 'Gagal Menghapus', {
-                                        timeOut: 5000
-                                    });
-                                }
-                                if (data.success) {
-                                    toastr.success(data.success, 'Berhasil', {
-                                        timeOut: 5000
-                                    });
-                                    
+                url: "{{ route('pesanan.deletepesanan') }}",
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                        'content')
+                },
+                data: idxRowData,
+                // contentType: "json",
+                // cache: false,
+                // processData: false,
+                // dataType: "json",
+                beforeSend: function () {
+                    // $('#saveentri').text('proses menyimpan...');
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.errors) {
+                        toastr.error(data.errors, 'Gagal Menghapus', {
+                            timeOut: 5000
+                        });
+                    }
+                    if (data.success) {
+                        toastr.success(data.success, 'Berhasil', {
+                            timeOut: 5000
+                        });
 
-                                }
 
-                            }
-                        }) 
+                    }
+
+                }
+            })
         }
         var table = $('#pesanan').DataTable({
             processing: true,
@@ -194,15 +196,15 @@ src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.
                 }
             ],
             buttons: [
-                
+
                 {
                     extend: "excelHtml5",
                     text: 'Download Excel',
                     className: 'btn btn-info',
-                    }
-                
-                
-            // 'pdfHtml5'
+                }
+
+
+                // 'pdfHtml5'
             ],
             language: {
                 emptyTable: "Tidak Ada Data Pesanan"
@@ -323,7 +325,7 @@ src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.
                     var column = this;
                     var select = $(
                             '<select  style="width:100%;" ><option value="">all</option></select>'
-                            )
+                        )
                         .appendTo($(column.footer()).empty())
                         .on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex(

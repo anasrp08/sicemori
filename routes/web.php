@@ -35,7 +35,7 @@ Route::group(['midlleware' => 'web'], function() {
     Route::get('/', 'HomeController@index');
 
     Route::get('/home', 'HomeController@index');
-    Route::get('/dashboard', 'HomeController@getDataDashboard')->name('dashboard.data');
+    // Route::get('/dashboard', 'HomeController@getDataDashboard')->name('dashboard.data');
 
     Route::get('pesanan/buatpesanan', 'PesananController@view')->name('pesanan.buat');
     Route::get('pesanan/viewindex', 'PesananController@viewindex')->name('pesanan.viewindex');
@@ -76,6 +76,15 @@ Route::group(['midlleware' => 'web'], function() {
     Route::post('mdpecahan/update_data', 'MDPecahanController@update') -> name('pecahan.updatedata');
     Route::post('pesanan/delete', 'MDPecahanController@deletePesanan') -> name('pecahan.deletepesanan');
     Route::resource('mdpecahan', 'MDPecahanController');
+
+    Route::get('mduser/listview', 'MDUserController@view')->name('mduser.view'); 
+    Route::post('mduser/daftar', 'MDUserController@index') -> name('mduser.daftar');
+    Route::post('mduser/buat', 'MDUserController@store') -> name('mduser.save');
+    Route::post('mduser/update_data', 'MDUserController@update') -> name('mduser.updatedata');
+    Route::get('mduser/destroy/{id}', 'MDUserController@destroy');
+    // Route::post('mduser/delete', 'MDUserController@delete') -> name('mduser.deletepesanan');
+    Route::resource('mduser', 'MDUserController');
+
 
     // Profile
     Route::get('settings/profile', 'SettingsController@profile');

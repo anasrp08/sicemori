@@ -86,7 +86,7 @@
   <!-- Navigation -->
   <ul class="navbar-nav mb-md-3">
     <li class="nav-item">
-      <a class="nav-link"  href="{{ route('user.viewindex') }}">
+      <a class="nav-link"  href="{{ route('mduser.view') }}">
         <i class="ni ni-spaceship"></i> Master Data User
       </a>
     </li>

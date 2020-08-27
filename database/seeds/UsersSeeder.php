@@ -27,12 +27,13 @@ class UsersSeeder extends Seeder
 
         $taskforceRole = new Role();
         $taskforceRole->name = "cemor"; 
-        $taskforceRole->display_name = "cemor";
+        $taskforceRole->display_name = "Cemor";
         $taskforceRole->save();
 
         // Create Admin sample
         $admin = new User();
         $admin->name = 'Admin SiCemori';
+        $admin->np = '7776';
         $admin->email = 'admin@sicemori';
         $admin->instansi = 'Admin';
         $admin->password = bcrypt('admin123');
@@ -44,6 +45,7 @@ class UsersSeeder extends Seeder
         // Create Sample member
         $bc = new User();
         $bc->name = 'Candal';
+        $bc->np = '7776';
         $bc->email = 'candal@sicemori';
         $bc->instansi = 'Candal';
         $bc->password = bcrypt('candal123');
@@ -54,6 +56,7 @@ class UsersSeeder extends Seeder
 
         $tf = new User();
         $tf->name = 'Cemor';
+        $tf->np = '7776';
         $tf->email = 'cemor@sicemori';
         $tf->instansi = 'Cemor';
         $tf->password = bcrypt('cemor123');
