@@ -158,12 +158,12 @@ Catat Jumlah Pesanan Pecahan
             // var lembarinsit = orderInsitrounded * pembagilembar
             var totalorder = orderWithOinsit + orderInsit
             var totalpesanan = parseInt($('#jumlah_pesanan').val()) + jmlhInsit 
-
-            $('#total_order').text(parseInt(totalorder))
+            
+            $('#total_order').text(Math.round(totalorder))
             $('#jumlah_insit').text(jmlhInsit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
             $('#order_tnpinsit').text(parseInt(orderWithOinsit));
             // $('#order_tnpinsit').val(Math.round(orderWithOinsit * 10) / 10);
-            $('#order_insit').text(parseInt(orderInsit))
+            $('#order_insit').text(parseInt(orderInsitrounded))
 
             $('#lembar_insit').text(lembarinsit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
             $('#total_pesanan').text(totalpesanan.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))

@@ -43,8 +43,21 @@
     .insiet {
         background-color: #0040ff4f !important;
     }
-    .orderrilis {
+    .ordercetak {
         background-color: #d80202a8 !important;
+        
+    }
+    .orderrilis {
+        background-color: #21a0db6b !important;
+        
+    }
+    .orderrevisi {
+        background-color: #d86e02a8 !important;
+      
+    }
+    .orderselesai {
+        background-color: #4ec30485 !important;
+       
     }
     .insietslected {
         background-color: #0275d8 !important;
@@ -337,7 +350,7 @@
                             obj.level = dataSelected[i].level
                             
                            
-                                if (obj.status == '3') {
+                                if (obj.status == '4') {
                                 
                                 obj.update = "update"
                                 obj.revisi = parseInt(dataSelected[i].revisi) + 1
@@ -443,9 +456,18 @@
                 if (dataIndex == 0) {
                     $(row).addClass('insiet');
                 }
-
-                if(data.status == 2 || data.status == 4){
+                if (data.status == 1) {
                     $(row).addClass('orderrilis');
+                }
+
+                if(data.status == 2){
+                    $(row).addClass('ordercetak');
+                }
+                if(data.status == 3 ){
+                    $(row).addClass('orderselesai');
+                }
+                if(data.status == 4){
+                    $(row).addClass('orderrevisi');
                 }
 
 
@@ -754,7 +776,7 @@ return '-'
                     name: 'status',
                     render: function (data, type, row, meta) {
                         var $select = $(
-                            '<select name="status" class="pilihan form-control" id="status'+meta.row+'" style="width: 11rem;"><option value="">--Pilihan--</option><option value="0">Belum Rilis</option><option value="1">Order Rilis</option><option value="2">Order Proses Cetak</option><option value="3">Order Selesai</option><option value="4">Order Revisi</option></select>'
+                            '<select name="status" class="pilihan form-control" id="status'+meta.row+'" style="width: 11rem;"><option value="">--Pilihan--</option><option value="0">Belum Rilis</option><option value="1">Order Rilis</option><option value="2">Proses Cetak Order</option><option value="3">Order Selesai</option><option value="4">Order Revisi</option></select>'
                         );
                         $select.find('option[value="' + data + '"]').attr('selected',
                             'selected');

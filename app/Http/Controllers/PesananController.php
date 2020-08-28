@@ -51,6 +51,13 @@ class PesananController extends Controller
 
         return view('pesanan.index', []);
     }
+    public function viewMaster($idpesanan)
+    {
+
+        return view('pesanan.master_order', [
+            'idpesanan'=>$idpesanan
+        ]);
+    }
     public function show()
     {
     }
@@ -71,11 +78,27 @@ class PesananController extends Controller
         if (request()->ajax()) {
             return datatables()->of(Pesanan::latest()->get())
 
-                ->addColumn('action', 'action_button_pesanan')
+                ->addColumn('action', 'action_butt_pesanan')
                 ->rawColumns(['action'])
                 ->addIndexColumn()
                 ->make(true);
         }
+    }
+    public function masterOrder(Request $request)
+    { 
+
+    //    dd($request->all());
+        if (request()->ajax()) {
+            return datatables()->of(LampiranOrder::where('idpesanan',$request->val_idpesanan)->get())
+                    ->addColumn('action', 'action_butt_lampiran')
+                    ->rawColumns(['action'])
+                    ->addIndexColumn()
+                    ->make(true);
+        }
+        // $tes=LampiranOrder::orderBy('no_lampiran','asc')->groupBy('no_lampiran','pecahan','ta')->get();
+        // dd($tes);
+        return view('pesanan.master_order');
+
     }
 
     public function store(Request $request)
@@ -351,4 +374,5 @@ class PesananController extends Controller
             ->delete();
         return response()->json(['success' => 'Data Berhasil Di Hapus']);
     }
+    
 }

@@ -39,9 +39,12 @@ Route::group(['midlleware' => 'web'], function() {
 
     Route::get('pesanan/buatpesanan', 'PesananController@view')->name('pesanan.buat');
     Route::get('pesanan/viewindex', 'PesananController@viewindex')->name('pesanan.viewindex');
+    Route::get('pesanan/view_master/{idpesanan}', 'PesananController@viewMaster')->name('pesanan.viewmaster');
     Route::post('pesanan/getdatapesanan', 'PesananController@getDataPesanan')->name('pesanan.datapesanan');
     Route::post('pesanan/daftar', 'PesananController@index') -> name('pesanan.daftar');
-    Route::post('pesanan/delete', 'PesananController@deletePesanan') -> name('pesanan.deletepesanan');
+    Route::post('pesanan/master_order', 'PesananController@masterOrder') -> name('pesanan.master');
+    Route::post('pesanan/deletepesanan', 'PesananController@deletePesanan') -> name('pesanan.deletepesanan');
+    
     Route::resource('pesanan', 'PesananController');
 
     Route::get('lampiranorder/getUpdate', 'LampiranOrderController@getUpdate')->name('lampiranorder.getUpdate');

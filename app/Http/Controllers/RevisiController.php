@@ -53,7 +53,7 @@ class RevisiController extends Controller
     {
      
         if (request()->ajax()) {
-            $lampiran=Revisi::orderBy('nomor_order','desc')->whereIn('status',['1','2','3'])->get();
+            $lampiran=Revisi::orderBy('nomor_order','desc')->get();
             //  dd($lampiran);
             return datatables()->of($lampiran)
                     ->addColumn('action', 'action_butt_revisi')

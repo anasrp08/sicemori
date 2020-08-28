@@ -48,7 +48,7 @@
                     <span class="login100-form-title">
 						SICEMORI
 					</span>
-					@include('layouts._flash')
+					{{-- @include('layouts._flash') --}}
 					<div class="wrap-input100 validate-input" data-validate = "username is required" value="{{ old('email') }}" required autofocus>
 						<input class="input100" type="text" name="email" placeholder="Username">
 						

@@ -119,233 +119,253 @@ src="https://cdn.datatables.net/v/bs/dt-1.10.18/b-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.
 <script>
     $(document).ready(function () {
 
-        $('#refresh').click(function () {
+                $('#refresh').click(function () {
 
 
-            $('#pesanan').DataTable().ajax.reload();
+                    $('#pesanan').DataTable().ajax.reload();
 
-        })
+                })
 
-        $('#pesanan').on('click', '.delete', function () {
-            $('#exampleModal').modal()
-            delSelectedRow($(this))
-        });
 
-        function delSelectedRow(thisTable) {
-            $('#deletebaris').on('click', function () {
-                var idx = thisTable.closest('tr').index()
 
-                saveDelSelectedRow(table.row(idx).data())
-                $('#pesanan').DataTable().ajax.reload();
-                $('#exampleModal').modal('toggle')
-            })
 
-        }
+                function delSelectedRow(thisTable) {
+                    $('#deletebaris').on('click', function () {
+                        var idx = thisTable.closest('tr').index()
 
-        function saveDelSelectedRow(idxRowData) {
-            $.ajax({
-                url: "{{ route('pesanan.deletepesanan') }}",
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                        'content')
-                },
-                data: idxRowData,
-                // contentType: "json",
-                // cache: false,
-                // processData: false,
-                // dataType: "json",
-                beforeSend: function () {
-                    // $('#saveentri').text('proses menyimpan...');
-                },
-                success: function (data) {
-                    console.log(data)
-                    if (data.errors) {
-                        toastr.error(data.errors, 'Gagal Menghapus', {
-                            timeOut: 5000
+                        saveDelSelectedRow(table.row(idx).data())
+                        $('#pesanan').DataTable().ajax.reload();
+                        $('#exampleModal').modal('toggle')
+                    })
+
+                }
+
+                function saveDelSelectedRow(idxRowData) {
+                    $.ajax({
+                        url: "{{ route('pesanan.deletepesanan') }}",
+                        method: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content')
+                        },
+                        data: idxRowData,
+                        // contentType: "json",
+                        // cache: false,
+                        // processData: false,
+                        // dataType: "json",
+                        beforeSend: function () {
+                            // $('#saveentri').text('proses menyimpan...');
+                        },
+                        success: function (data) {
+                            console.log(data)
+                            if (data.errors) {
+                                toastr.error(data.errors, 'Gagal Menghapus', {
+                                    timeOut: 5000
+                                });
+                            }
+                            if (data.success) {
+                                toastr.success(data.success, 'Berhasil', {
+                                    timeOut: 5000
+                                });
+
+
+                            }
+
+                        }
+                    })
+                }
+                var table = $('#pesanan').DataTable({
+                        processing: true,
+                        serverSide: false,
+                        order: [],
+                        // scrollY: "300px",
+                        scrollCollapse: true,
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        columnDefs: [
+                            // { className: 'text-right', targets: [7, 10, 11, 14, 16] },
+                            {
+                                className: 'text-center',
+                                // targets: [0, 2,3,5,6,8,9,10,11,12,13,15]
+                            },
+                            {
+                                className: 'dt-body-nowrap',
+                                targets: -1
+                            }
+                        ],
+                        buttons: [
+
+                            {
+                                extend: "excelHtml5",
+                                text: 'Download Excel',
+                                className: 'btn btn-info',
+                                exportOptions: {
+                                    modifier: {
+                                        order: 'index', // 'current', 'applied','index', 'original'
+                                        page: 'all', // 'all', 'current'
+                                        search: 'none' // 'none', 'applied', 'removed'
+                                    },
+                                }
+                            }
+
+                                // 'pdfHtml5'
+                            ],
+                            language: {
+                                emptyTable: "Tidak Ada Data Pesanan"
+                            },
+                            // ajax: {
+                            //     url: "{{ route('pesanan.index') }}",
+                            // },
+                            ajax: {
+
+                                url: "{{ route('pesanan.daftar') }}",
+                                type: "POST",
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: function (d) {
+
+                                    // d.val_idjadwal = idjadwal;
+                                }
+                            },
+                            columns: [{
+                                    data: 'DT_RowIndex',
+                                    name: 'DT_RowIndex'
+                                },
+                                {
+                                    data: 'pecahan',
+                                    name: 'pecahan'
+                                },
+                                {
+                                    data: 'tahun',
+                                    name: 'tahun'
+                                },
+
+
+                                {
+                                    data: 'order_terakhir',
+                                    name: 'order_terakhir',
+
+                                },
+                                {
+                                    data: 'seri_terakhir',
+                                    name: 'seri_terakhir',
+
+                                },
+                                {
+                                    data: 'jumlah_pesanan',
+                                    name: 'jumlah_pesanan',
+                                    render: function (data, type, row) {
+
+                                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                    }
+                                },
+                                {
+                                    data: 'insit_persen',
+                                    name: 'insit_persen',
+                                    render: function (data, type, row) {
+
+                                        return data + " %";
+
+                                    }
+                                },
+
+                                {
+                                    data: 'jumlah_insit',
+                                    name: 'jumlah_insit',
+                                    render: function (data, type, row) {
+
+                                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                    }
+
+                                },
+                                {
+                                    data: 'lembar_insit',
+                                    name: 'lembar_insit',
+                                    render: function (data, type, row) {
+
+                                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                    }
+
+                                },
+                                {
+                                    data: 'order_tnpinsit',
+                                    name: 'order_tnpinsit',
+
+                                },
+                                {
+                                    data: 'order_insit',
+                                    name: 'order_insit',
+
+                                },
+                                {
+                                    data: 'total_order',
+                                    name: 'total_order',
+
+                                },
+                                {
+                                    data: 'total_pesanan',
+                                    name: 'total_pesanan',
+                                    render: function (data, type, row) {
+
+                                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                                    }
+
+                                },
+                                {
+                                    data: 'action',
+                                    name: 'action',
+                                    orderable: false
+
+                                },
+
+                            ],
+                            initComplete: function () {
+                                this.api().columns('.select-filter').every(function () {
+                                    var column = this;
+                                    var select = $(
+                                            '<select  style="width:100%;" ><option value="">all</option></select>'
+                                        )
+                                        .appendTo($(column.footer()).empty())
+                                        .on('change', function () {
+                                            var val = $.fn.dataTable.util.escapeRegex(
+                                                $(this).val()
+                                            );
+
+                                            column
+                                                .search(val ? '^' + val + '$' : '', true, false)
+                                                .draw();
+                                        });
+
+                                    column.data().unique().sort().each(function (d, j) {
+                                        select.append('<option value="' + d + '">' + d +
+                                            '</option>')
+                                    });
+                                });
+                            }
                         });
-                    }
-                    if (data.success) {
-                        toastr.success(data.success, 'Berhasil', {
-                            timeOut: 5000
-                        });
 
+                    $('#pesanan').on('click', '.delete', function () {
+                        $('#exampleModal').modal()
+                        delSelectedRow($(this))
+                    }); $('#pesanan').on('click', '.view', function () {
+                        var data1 = table.row($(this).parents('tr')).data();
+                        console.log(data1)
+                        // var dataParam = {
+                        //     'idpesanan': data1.idpesanan,
 
-                    }
+                        // }
+                        var url = '{{ route("pesanan.viewmaster",[":idpesanan"])}}';
+                        url = url.replace(":idpesanan", data1.id);
 
-                }
-            })
-        }
-        var table = $('#pesanan').DataTable({
-            processing: true,
-            serverSide: true,
-            order: [],
-            // scrollY: "300px",
-            scrollCollapse: true,
-            scrollX: true,
-            dom: 'Bfrtip',
-            columnDefs: [
-                // { className: 'text-right', targets: [7, 10, 11, 14, 16] },
-                {
-                    className: 'text-center',
-                    // targets: [0, 2,3,5,6,8,9,10,11,12,13,15]
-                },
-                {
-                    className: 'dt-body-nowrap',
-                    targets: -1
-                }
-            ],
-            buttons: [
-
-                {
-                    extend: "excelHtml5",
-                    text: 'Download Excel',
-                    className: 'btn btn-info',
-                }
-
-
-                // 'pdfHtml5'
-            ],
-            language: {
-                emptyTable: "Tidak Ada Data Pesanan"
-            },
-            // ajax: {
-            //     url: "{{ route('pesanan.index') }}",
-            // },
-            ajax: {
-
-                url: "{{ route('pesanan.daftar') }}",
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: function (d) {
-
-                    // d.val_idjadwal = idjadwal;
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex'
-                },
-                {
-                    data: 'pecahan',
-                    name: 'pecahan'
-                },
-                {
-                    data: 'tahun',
-                    name: 'tahun'
-                },
-
-
-                {
-                    data: 'order_terakhir',
-                    name: 'order_terakhir',
-
-                },
-                {
-                    data: 'seri_terakhir',
-                    name: 'seri_terakhir',
-
-                },
-                {
-                    data: 'jumlah_pesanan',
-                    name: 'jumlah_pesanan',
-                    render: function (data, type, row) {
-
-                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                    }
-                },
-                {
-                    data: 'insit_persen',
-                    name: 'insit_persen',
-                    render: function (data, type, row) {
-
-                        return data + " %";
-
-                    }
-                },
-
-                {
-                    data: 'jumlah_insit',
-                    name: 'jumlah_insit',
-                    render: function (data, type, row) {
-
-                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                    }
-
-                },
-                {
-                    data: 'lembar_insit',
-                    name: 'lembar_insit',
-                    render: function (data, type, row) {
-
-                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                    }
-
-                },
-                {
-                    data: 'order_tnpinsit',
-                    name: 'order_tnpinsit',
-
-                },
-                {
-                    data: 'order_insit',
-                    name: 'order_insit',
-
-                },
-                {
-                    data: 'total_order',
-                    name: 'total_order',
-
-                },
-                {
-                    data: 'total_pesanan',
-                    name: 'total_pesanan',
-                    render: function (data, type, row) {
-
-                        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                    }
-
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false
-
-                },
-
-            ],
-            initComplete: function () {
-                this.api().columns('.select-filter').every(function () {
-                    var column = this;
-                    var select = $(
-                            '<select  style="width:100%;" ><option value="">all</option></select>'
-                        )
-                        .appendTo($(column.footer()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex(
-                                $(this).val()
-                            );
-
-                            column
-                                .search(val ? '^' + val + '$' : '', true, false)
-                                .draw();
-                        });
-
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="' + d + '">' + d +
-                            '</option>')
+                        document.location.href = url;
                     });
-                });
-            }
-        });
 
-    })
+                })
 
 </script>
 @endsection
