@@ -37,6 +37,8 @@
         <i class="ni ni-tv-2 text-primary"></i> Dashboard
       </a>
     </li>
+    @if (Auth::check())
+    @role(['admin','candal'])
     <li class="nav-item">
       <a class="nav-link " href="{{ route('pesanan.buat') }}">
         {{-- <i class="ni ni-planet text-blue"></i> --}}
@@ -101,4 +103,23 @@
       </a>
     </li> --}}
   </ul>
- 
+  @endrole
+  @role(['cemor'])
+  <li class="nav-item">
+    <a class="nav-link " href="{{ route('lampirankerja.viewindex') }}">
+      <i class="ni ni-bullet-list-67 text-red"></i> Daftar LPK
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('lampirankerja.laporlpk') }}">
+      <i class="ni ni-key-25 text-info"></i> Lapor Hasil Perintah Kerja
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('revisi.viewindex') }}">
+     
+      <i class="fas fa-clipboard-list text-red"></i>Daftar Revisi Order
+    </a>
+  </li>
+  @endrole
+ @endif
